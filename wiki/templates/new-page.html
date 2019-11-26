@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h3>New Page</h3>
+    <hr>
+    <div class="row">
+        <div class="col">
+            {% if form.errors %}
+                <p>There were some errors in the information you entered. Please correct the following:</p>
+                <ul class="text-danger">
+                    {% for field in form %}
+                        {% if field.errors %}<li>{{ field.label }}: {{ field.errors|striptags }}</li>{% endif %}
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            <form method="post" action="{% url 'new-page' %}" class="mx-auto">
+                {% csrf_token %}
+                <div class="form-group row">
+                    {{ form.as_p }}
+                    <div class="col-8">
+                        <input type="submit" value="New Page" class="btn btn-success">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

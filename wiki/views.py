@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView
 
 from wiki.models import Page
-
+from wiki.forms import PageForm
 
 class PageListView(ListView):
     """ Renders a list of all Pages. """
@@ -26,3 +27,14 @@ class PageDetailView(DetailView):
         return render(request, 'page.html', {
           'page': page
         })
+
+class NewPage(CreateView):
+    def get(self, request):
+        return render(request, 'new-page.html')
+
+    def post(self, request):
+      form = PageForm(request.POST)
+      if form.is_valid():
+          page = form.save()
+          return HttpResponseRedirect(reverse_lazy('page:slug'))
+      return render(request, 'new-page', {'form': form})
